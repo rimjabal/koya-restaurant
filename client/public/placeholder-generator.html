@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placeholder Image Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Placeholder Image Generator for Koya Restaurant</h1>
+        <p>Click the button below to generate all the placeholder images needed for the website:</p>
+        <button id="generateBtn">Generate All Placeholder Images</button>
+        <div class="status" id="status"></div>
+        <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', generateAllImages);
+
+        function generateAllImages() {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = 'Generating images...';
+
+            // Main images
+            const mainImages = [
+                { name: 'hero-bg.jpg', width: 800, height: 600, text: 'Hero Background', color: '#70a1ff' },
+                { name: 'cta-bg.jpg', width: 800, height: 400, text: 'CTA Background', color: '#ff7f50' },
+                { name: 'about-img.jpg', width: 400, height: 400, text: 'About Image', color: '#7bed9f' },
+                { name: 'menu-header.jpg', width: 800, height: 400, text: 'Menu Header', color: '#5352ed' },
+                { name: 'dish1.jpg', width: 400, height: 300, text: 'Dish 1', color: '#ff6b81' },
+                { name: 'dish2.jpg', width: 400, height: 300, text: 'Dish 2', color: '#ffa502' },
+                { name: 'dish3.jpg', width: 400, height: 300, text: 'Dish 3', color: '#2ed573' }
+            ];
+
+            // Menu images
+            const menuImages = [
+                // Drinks
+                { name: 'menu/drink1.jpg', width: 300, height: 300, text: 'Drink 1', color: '#1e90ff' },
+                { name: 'menu/drink2.jpg', width: 300, height: 300, text: 'Drink 2', color: '#3742fa' },
+                { name: 'menu/drink3.jpg', width: 300, height: 300, text: 'Drink 3', color: '#70a1ff' },
+                { name: 'menu/drink4.jpg', width: 300, height: 300, text: 'Drink 4', color: '#5352ed' },
+                
+                // Appetizers
+                { name: 'menu/appetizer1.jpg', width: 300, height: 300, text: 'Appetizer 1', color: '#ff6b81' },
+                { name: 'menu/appetizer2.jpg', width: 300, height: 300, text: 'Appetizer 2', color: '#ff4757' },
+                { name: 'menu/appetizer3.jpg', width: 300, height: 300, text: 'Appetizer 3', color: '#ff6348' },
+                { name: 'menu/appetizer4.jpg', width: 300, height: 300, text: 'Appetizer 4', color: '#ff7f50' },
+                
+                // Main courses
+                { name: 'menu/main1.jpg', width: 300, height: 300, text: 'Main 1', color: '#2ed573' },
+                { name: 'menu/main2.jpg', width: 300, height: 300, text: 'Main 2', color: '#7bed9f' },
+                { name: 'menu/main3.jpg', width: 300, height: 300, text: 'Main 3', color: '#26de81' },
+                { name: 'menu/main4.jpg', width: 300, height: 300, text: 'Main 4', color: '#2ecc71' },
+                { name: 'menu/main5.jpg', width: 300, height: 300, text: 'Main 5', color: '#20bf6b' },
+                { name: 'menu/main6.jpg', width: 300, height: 300, text: 'Main 6', color: '#26de81' },
+                
+                // Desserts
+                { name: 'menu/dessert1.jpg', width: 300, height: 300, text: 'Dessert 1', color: '#ffa502' },
+                { name: 'menu/dessert2.jpg', width: 300, height: 300, text: 'Dessert 2', color: '#ffb142' },
+                { name: 'menu/dessert3.jpg', width: 300, height: 300, text: 'Dessert 3', color: '#ff9f43' },
+                { name: 'menu/dessert4.jpg', width: 300, height: 300, text: 'Dessert 4', color: '#eccc68' }
+            ];
+
+            const allImages = [...mainImages, ...menuImages];
+            let completed = 0;
+
+            allImages.forEach(img => {
+                generatePlaceholder(img, () => {
+                    completed++;
+                    statusEl.innerHTML = `Generated ${completed} of ${allImages.length} images`;
+                    
+                    if (completed === allImages.length) {
+                        statusEl.innerHTML += '<br><strong>All images generated successfully!</strong><br>You can now close this page and refresh your application.';
+                    }
+                });
+            });
+        }
+
+        function generatePlaceholder({ name, width, height, text, color }, callback) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Resize canvas to match image dimensions
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.fillStyle = color || '#ddd';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw text
+            ctx.fillStyle = '#fff';
+            ctx.font = `bold ${Math.max(20, Math.floor(width/15))}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text || name, width/2, height/2);
+            
+            // Draw dimensions at bottom
+            ctx.font = '14px Arial';
+            ctx.fillText(`${width}x${height}`, width/2, height - 20);
+            
+            // Convert to blob and download
+            canvas.toBlob(blob => {
+                const link = document.createElement('a');
+                link.download = name;
+                link.href = URL.createObjectURL(blob);
+                
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                if (callback) callback();
+            }, 'image/jpeg', 0.9);
+        }
+    </script>
+</body>
+</html>
